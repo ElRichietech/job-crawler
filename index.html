@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Career Pages</title>
+</head>
+<body>
+    <h1>Company Career Pages</h1>
+    <div id="career-pages"></div>
+
+    <script>
+        async function fetchCareerPages() {
+            const response = await fetch("/api/career-pages");
+            const pages = await response.json();
+            const container = document.getElementById("career-pages");
+            container.innerHTML = pages.map(page => `<p>${page.url}</p>`).join("");
+        }
+        fetchCareerPages();
+    </script>
+</body>
+</html>

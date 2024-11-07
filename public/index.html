@@ -1,0 +1,48 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Crawler</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .job-list { max-width: 600px; margin: 0 auto; }
+        .job-item { padding: 10px; border-bottom: 1px solid #ccc; }
+        .job-item:last-child { border-bottom: none; }
+        .available { color: green; }
+        .unavailable { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Job Crawler</h1>
+    <div class="job-list" id="jobList">
+        <!-- Job items will be inserted here -->
+    </div>
+
+    <script>
+        async function loadCareerPages() {
+            const response = await fetch('/api/career-pages');
+            const careerPages = await response.json();
+            const jobList = document.getElementById('jobList');
+            jobList.innerHTML = '';
+
+            careerPages.forEach(page => {
+                const jobItem = document.createElement('div');
+                jobItem.classList.add('job-item');
+                jobItem.innerHTML = `
+                    <h3>${page.company}</h3>
+                    <p>URL: <a href="${page.url}" target="_blank">${page.url}</a></p>
+                    <p>Status: <span class="${page.jobAvailable ? 'available' : 'unavailable'}">
+                        ${page.jobAvailable ? 'Jobs Available' : 'No Jobs'}
+                    </span></p>
+                `;
+                jobList.appendChild(jobItem);
+            });
+        }
+
+        // Load career pages when the page loads
+        window.onload = loadCareerPages;
+    </script>
+</body>
+</html>
